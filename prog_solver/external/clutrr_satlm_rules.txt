@@ -1,0 +1,182 @@
+sister-in-law brother -> husband brother-in-law
+sister-in-law sister -> wife sister-in-law
+brother-in-law brother -> husband brother-in-law
+brother-in-law sister -> wife sister-in-law
+nephew sister -> niece
+nephew brother -> nephew
+niece sister -> niece
+niece brother -> nephew
+grandson aunt -> daughter daughter-in-law
+grandson uncle -> son son-in-law
+granddaughter aunt -> daughter daughter-in-law
+granddaughter uncle -> son son-in-law
+sister-in-law father -> father-in-law
+niece grandfather -> father father-in-law
+uncle mother -> grandmother
+uncle brother -> father uncle
+uncle father -> grandfather
+uncle sister -> mother aunt
+mother daughter-in-law -> wife sister-in-law
+father daughter-in-law -> wife sister-in-law
+mother son-in-law -> husband brother-in-law
+father son-in-law -> husband brother-in-law
+mother grandson -> son nephew
+mother granddaughter -> daughter niece
+nephew grandmother -> mother mother-in-law
+nephew grandfather -> father father-in-law
+nephew mother -> sister sister-in-law
+nephew father -> brother brother-in-law
+brother niece -> daughter niece
+brother nephew -> son nephew
+granddaughter grandmother -> wife
+granddaughter grandfather -> husband
+father granddaughter -> daughter niece
+father grandson -> son nephew
+aunt mother -> grandmother
+aunt brother -> father uncle
+aunt father -> grandfather
+aunt sister -> mother aunt
+son uncle -> brother brother-in-law
+son aunt -> sister sister-in-law
+sister niece -> daughter niece
+sister nephew -> son nephew
+daughter uncle -> brother brother-in-law
+daughter aunt -> sister sister-in-law
+niece father -> brother brother-in-law
+niece mother -> sister sister-in-law
+sister-in-law mother -> mother-in-law
+brother-in-law father -> father-in-law
+brother-in-law mother -> mother-in-law
+mother-in-law daughter -> wife sister-in-law
+father-in-law daughter -> wife sister-in-law
+sister-in-law husband -> brother brother-in-law
+brother-in-law wife -> sister sister-in-law
+mother-in-law son -> husband brother-in-law
+cousin grandmother -> grandmother
+cousin grandfather -> grandfather
+niece grandmother -> mother mother-in-law
+niece uncle -> brother husband brother-in-law
+niece aunt -> sister wife sister-in-law
+nephew uncle -> husband brother brother-in-law
+nephew aunt -> wife sister sister-in-law
+cousin uncle -> father uncle
+cousin aunt -> mother aunt
+grandson grandfather -> husband
+grandson grandmother -> wife
+cousin mother -> aunt
+cousin father -> uncle
+cousin sister -> cousin
+cousin brother -> cousin
+father-in-law son -> husband brother-in-law
+husband father -> father-in-law
+husband mother -> mother-in-law
+husband son -> son
+husband daughter -> daughter
+husband brother -> brother-in-law
+husband sister -> sister-in-law
+husband mother-in-law -> mother
+husband father-in-law -> father
+husband son-in-law -> son-in-law
+husband daughter-in-law -> daughter-in-law
+husband grandson -> grandson
+husband granddaughter -> granddaughter
+wife father -> father-in-law
+wife mother -> mother-in-law
+wife son -> son
+wife daughter -> daughter
+wife brother -> brother-in-law
+wife sister -> sister-in-law
+wife mother-in-law -> mother
+wife father-in-law -> father
+wife son-in-law -> son-in-law
+wife daughter-in-law -> daughter-in-law
+wife grandson -> grandson
+wife granddaughter -> granddaughter
+son father -> husband
+son mother -> wife
+son brother -> son
+son sister -> daughter
+son son -> grandson
+son daughter -> granddaughter
+son wife -> daughter-in-law
+son grandfather -> father father-in-law
+son grandmother -> mother mother-in-law
+daughter father -> husband
+daughter mother -> wife
+daughter brother -> son
+daughter sister -> daughter
+daughter son -> grandson
+daughter daughter -> granddaughter
+daughter husband -> son-in-law
+daughter grandfather -> father father-in-law
+daughter grandmother -> mother mother-in-law
+father father -> grandfather
+father mother -> grandmother
+father wife -> mother
+father son -> brother
+father daughter -> sister
+father sister -> aunt
+father brother -> uncle
+father father-in-law -> grandfather
+father mother-in-law -> grandmother
+mother father -> grandfather
+mother mother -> grandmother
+mother husband -> father
+mother son -> brother
+mother daughter -> sister
+mother brother -> uncle
+mother sister -> aunt
+mother father-in-law -> grandfather
+mother mother-in-law -> grandmother
+grandson brother -> grandson
+grandson sister -> granddaughter
+grandson father -> son son-in-law
+grandson mother -> daughter daughter-in-law
+granddaughter brother -> grandson
+granddaughter sister -> granddaughter
+granddaughter father -> son son-in-law
+granddaughter mother -> daughter daughter-in-law
+brother grandmother -> grandmother
+brother grandfather -> grandfather
+brother father -> father
+brother mother -> mother
+brother wife -> sister-in-law
+brother son -> nephew
+brother daughter -> niece
+brother brother -> brother
+brother sister -> sister
+brother uncle -> uncle
+brother aunt -> aunt
+sister grandmother -> grandmother
+sister grandfather -> grandfather
+sister father -> father
+sister mother -> mother
+sister husband -> brother-in-law
+sister son -> nephew
+sister daughter -> niece
+sister brother -> brother
+sister sister -> sister
+sister uncle -> uncle
+sister aunt -> aunt
+grandfather wife -> grandmother
+grandfather son -> father uncle
+grandfather daughter -> mother aunt
+grandmother husband -> grandfather
+grandmother son -> father uncle
+grandmother daughter -> mother aunt
+son-in-law son -> grandson
+son-in-law daughter -> granddaughter
+daughter-in-law son -> grandson
+daughter-in-law daughter -> granddaughter
+mother-in-law husband -> father-in-law
+father-in-law wife -> mother-in-law
+brother-in-law son -> nephew
+sister-in-law son -> nephew
+brother-in-law daughter -> niece
+sister-in-law daughter -> niece
+uncle wife -> aunt
+uncle son -> cousin
+uncle daughter -> cousin
+aunt husband -> uncle
+aunt son -> cousin
+aunt daughter -> cousin
