@@ -31,6 +31,8 @@ class TaskHelper:
             return CLUTRRTaskHelper(style)
         elif taskname == "proofd5":
             return ProofD5TaskHelper(style)
+        elif taskname == "arlsat":
+            return ArLSATTaskHelper(style)
         else:
             raise RuntimeError("Not Implemented Yet")
 
@@ -190,3 +192,78 @@ class CLUTRRTaskHelper(TaskHelper):
             test_ex["context"], test_ex["query"][1], test_ex["query"][0]
         )
         return test_example
+
+
+class LongContextMCQAHelper(TaskHelper):
+    style_to_completion_length = {
+        "std": 16,
+        "cot": 512,
+        "satlm": 1024,
+    }
+
+    style_to_train_sep = {
+        "std": "\n\n",
+        "cot": "\n\n\n\n",
+        "satlm": "\n\n\n\n",
+    }
+
+    CHOICE_IDX = ["(A)", "(B)", "(C)", "(D)", "(E)"]
+    CODE_HEADER = "### write python code to answer the question"
+    CODE_BLOCK_COMMENT = '"""'
+    def prompt_func(self, test_ex, shots):
+        if self.style == "std":
+            return self.std_prompt(test_ex, shots)
+        elif self.style == "cot":
+            return self.cot_prompt(test_ex, shots)
+        elif self.style == "satlm":
+            return self.satlm_prompt(test_ex, shots)
+        else:
+            raise RuntimeError("Not Implemented Yet")
+
+    def std_prompt(self, test_ex, shots):
+        def _single_ex_func(ex, is_train):
+            choice_str = "\n".join([self.CHOICE_IDX[i] + " " + x for (i, x) in enumerate(ex["choices"])])
+            p_ex = "{}\nQuestion: {}\nChoices:\n{}\nAnswer:".format(ex["context"], ex["question"], choice_str)
+            if is_train:
+                p_ex = p_ex + " The answer is {}.".format(self.CHOICE_IDX[ex["label"]])
+            return p_ex
+
+        showcase_examples = [
+            _single_ex_func(s, True) for s in shots
+        ]
+        test_example = [_single_ex_func(test_ex, False)]
+        return self.get_train_sep().join(showcase_examples + test_example)
+
+    def cot_prompt(self, test_ex, shots):
+        def _single_ex_func(ex, is_train):
+            assert not is_train
+            choice_str = "\n".join([self.CHOICE_IDX[i] + " " + x for (i, x) in enumerate(ex["choices"])])
+            p_ex = "{}\nQuestion: {}\nChoices:\n{}\nAnswer:".format(ex["context"], ex["question"], choice_str)
+            return p_ex
+
+        showcase_examples = [
+            _single_ex_func(s, True) for s in shots
+        ]
+        test_example = [_single_ex_func(test_ex, False)]
+        return  self.get_train_sep().join(showcase_examples + test_example)
+
+    def satlm_prompt(self, test_ex, shots):
+        def _single_ex_func(ex, is_train):
+            assert not is_train
+            choice_str = "\n".join([self.CHOICE_IDX[i] + " " + x for (i, x) in enumerate(ex["choices"])])
+            p_ex = "{}\n{}\n{}\nQuestion: {}\nChoices:\n{}\n{}\n".format(
+                self.CODE_HEADER,
+                self.CODE_BLOCK_COMMENT,
+                ex["context"], ex["question"], choice_str,
+                self.CODE_BLOCK_COMMENT)
+            return p_ex
+
+        showcase_examples = [
+            _single_ex_func(s, True) for s in shots
+        ]
+        test_example = [_single_ex_func(test_ex, False)]
+        return  self.get_train_sep().join(showcase_examples + test_example)
+
+
+class ArLSATTaskHelper(LongContextMCQAHelper):
+    pass

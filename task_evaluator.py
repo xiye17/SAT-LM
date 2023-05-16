@@ -16,6 +16,7 @@ from os.path import join
 from prog_solver.gsm_solver import  gsm_proglm_exec, gsm_satlm_exec
 from prog_solver.clutrr_solver import clutrr_proglm_exec, clutrr_satlm_exec
 from prog_solver.proof_solver import proof_proglm_exec, proof_satlm_exec
+from prog_solver.arlsat_solver import arlsat_satlm_exec
 
 
 EVALUATOR_REGISTRY = {}
@@ -430,6 +431,70 @@ class ProofD5Evaluator(TaskEvaluator):
     @classmethod
     def generate_random_answer(cls):
         return random.choice(["True", "False"])
+
+
+class LongContextMCEvaluator(TaskEvaluator):
+    ANSWER_HINT = "the answer is"
+    CHOICES = ['a', 'b', 'c', 'd', 'e']
+
+    @staticmethod
+    def postprocess_ground_truth(gt):
+        return gt
+
+    @classmethod
+    def enter_evaluation(cls):
+        random.seed(42)
+
+    @classmethod
+    def generate_random_answer(cls):
+        return random.choice([0, 1, 2, 3])
+
+    @staticmethod
+    def postprocess_completion(completion, prompting_style, train_sep, example=None):
+        completion = completion.rstrip().split(train_sep)[0]
+        if prompting_style == "std" or prompting_style == "cot":
+            return LongContextMCEvaluator.postprocess_qa_style_completion(completion)
+        elif prompting_style == "satlm":
+            return LongContextMCEvaluator.postprocess_sat_style_completion(completion)
+        else:
+            raise RuntimeError("Not implemented")
+
+    @staticmethod
+    def postprocess_sat_style_completion(completion):
+        status, result = arlsat_satlm_exec(completion)
+        if not status:
+            result = LongContextMCEvaluator.NULL_ANSWER
+        else:
+            if len(result) == 0:
+                result = LongContextMCEvaluator.NULL_ANSWER
+            else:
+                answer = result[-1].lower().rstrip(".").strip()
+                answer = answer.lstrip('(').rstrip(')')
+                if answer in LongContextMCEvaluator.CHOICES:
+                    answer = LongContextMCEvaluator.CHOICES.index(answer)
+                else:
+                    answer = LongContextMCEvaluator.NULL_ANSWER
+                result = answer
+        return completion, result
+
+    @staticmethod
+    def postprocess_qa_style_completion(completion):
+        hint_sent = "the answer is"
+        completion_lower = completion.lower()
+        if hint_sent in completion_lower:
+            answer = completion_lower.split(hint_sent)[1].rstrip(".").strip()
+            answer = answer.lstrip('(').rstrip(')')
+            if answer in LongContextMCEvaluator.CHOICES:
+                answer = LongContextMCEvaluator.CHOICES.index(answer)
+            else:
+                answer = LongContextMCEvaluator.NULL_ANSWER
+        else:
+            answer = LongContextMCEvaluator.NULL_ANSWER
+        return completion, answer
+
+
+class ArLSATEvaluator(LongContextMCEvaluator):
+    pass
 
 
 def get_task_evaluator(taskname):
