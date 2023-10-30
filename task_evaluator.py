@@ -155,12 +155,12 @@ class TaskEvaluator(ABC):
         eval_results = {}
         acc_records = np.array(acc_records)
         print("ACC: {:.2f}".format(np.mean(acc_records) * 100))
-        print("CONS: {:.2f}".format(np.mean(cons_records) * 100))
+        # print("CONS: {:.2f}".format(np.mean(cons_records) * 100))
         eval_results["accuracy"] = np.mean(acc_records)
         eval_results["consistency"] = np.mean(cons_records)
         if cov_records:
             cov_records = np.array(cov_records)
-            print("COV: {:.2f}".format(np.mean(cov_records) * 100))
+            # print("COV: {:.2f}".format(np.mean(cov_records) * 100))
             eval_results["converage"] = np.mean(cov_records)
         if return_verbose:
             eval_results["all_raw_predictions"] = all_proced_answers

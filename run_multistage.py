@@ -442,7 +442,6 @@ def run_translation_stage(args, test_data, problem_signatures):
 
     args.style_template = trans_setting.get_style_template()
     eval_results = run_evaluation(args, test_data, responses)
-    print_tabular_results("VOTE"+str(args.num_eval_samples), eval_results)
 
 
 def multistage_prompting(args):

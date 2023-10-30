@@ -167,14 +167,7 @@ def run_completion_tasks_with_cache(args, cache_fileneme, prompts_by_examples, m
 
         idx_lists = [x[0] for x in reqs]
         prompts = [x[1] for x in reqs]
-        # TODO: adhoc fix since openai reduces the rate
-        # if args.task == "gsm" and args.batch_size == 1 and args.num_samples == 40 and "code-davinci" in args.engine:
-        #     args.num_samples = 20
-        #     responses1 = batch_query_engine(args, prompts, task_max_tokens, stop_token)
-        #     responses2 = batch_query_engine(args, prompts, task_max_tokens, stop_token)
-        #     responses = [responses1[0] + responses2[0]]
-        #     args.num_samples = 40
-        # else:
+
         responses = batch_query_engine(args, prompts, task_max_tokens, stop_token)
 
         assert len(idx_lists) == len(responses)
@@ -199,6 +192,9 @@ def run_completion_tasks_with_cache(args, cache_fileneme, prompts_by_examples, m
 
 
 def score_of_completion(response):
+    if "logprobs" not in response or response["logprobs"] is None:
+        return .0, .0
+
     completion_offset = len(response["prompt"])
     tokens = response["logprobs"]["tokens"]
     token_offset = response["logprobs"]["text_offset"]

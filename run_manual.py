@@ -23,7 +23,7 @@ from task_evaluator import TaskEvaluator, get_task_evaluator, Prediction, print_
 def get_eval_split_abbrev(args):
     return args.eval_split
 
-def run_evaluation(args, test_data, responses, print_perplexity=True, return_verbose=False):
+def run_evaluation(args, test_data, responses, print_perplexity=False, return_verbose=False):
     evaluator = get_task_evaluator(args.task)
 
     prompting_style = args.style_template
@@ -109,14 +109,12 @@ def predict_framework(args):
     responses = [flatten_nested_list(resps_by_example) for resps_by_example in responses]
 
     eval_results = run_evaluation(args, test_data, responses)
-    print_tabular_results("VOTE"+str(args.num_eval_samples), eval_results)
 
 def eval_framework(args):
     _, test_data = load_train_test_set(args)
     responses = read_json(manual_query_result_filename_func(args))
     responses = [flatten_nested_list(resps_by_example) for resps_by_example in responses]
     eval_results = run_evaluation(args, test_data, responses)
-    print_tabular_results("VOTE"+str(args.num_eval_samples), eval_results)
 
 def main():
     parser = argparse.ArgumentParser()
