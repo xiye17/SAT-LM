@@ -1,5 +1,5 @@
 # SAT-LM
-SATisfiability-Aided Language Models using Declarative Prompting
+Code for [SatLM: SATisfiability-Aided Language Models using Declarative Prompting](https://arxiv.org/abs/2305.09656) (NeurIPS 2023).
 
 ## Setup
 * python==3.8
@@ -54,10 +54,10 @@ Prompts used in our experiments are stored as jsonline file in `manual_prompts/`
 ## Citation
 
 ```
-@article{satlm,
-  title = {SATisfiability-Aided Language Models using Declarative Prompting},
-  author = {Xi Ye, Qiaochu Chen, Isil Dillig, and Greg Durrett},
-  ournal = {arXiv},
+@InProceedings{Ye-Et-Al:2023:SAT,
+  title = {SatLM: Satisfiability-Aided Language Models Using Declarative Prompting},
+  author = {Xi Ye and Qiaochu Chen and Isil Dillig and Greg Durrett},
+  booktitle = {Proceedings of NeurIPS},
   year = {2023},
 }
 ```
