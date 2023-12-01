@@ -33,6 +33,12 @@ class TaskHelper:
             return ProofD5TaskHelper(style)
         elif taskname == "arlsat":
             return ArLSATTaskHelper(style)
+        elif taskname == "boardmaindp1":
+            return Boardmaindp1TaskHelper(style)
+        elif taskname == "boardmaindp2":
+            return Boardmaindp2TaskHelper(style)
+        elif taskname == "boardmaindp3":
+            return Boardmaindp3TaskHelper(style)
         else:
             raise RuntimeError("Not Implemented Yet")
 
@@ -267,3 +273,56 @@ class LongContextMCQAHelper(TaskHelper):
 
 class ArLSATTaskHelper(LongContextMCQAHelper):
     pass
+
+class BoardgameQATaskHelper(TaskHelper):
+    style_to_completion_length = {
+        "cot": 512,
+        "satlm": 768,
+    }
+
+    style_to_train_sep = {
+        "cot": "\n\n",
+        "satlm": "\n\n\n\n\n",
+    }
+
+    def prompt_func(self, test_ex, shots):
+        if self.style == "cot":
+            return self.cot_prompt(test_ex, shots)
+        elif self.style == "satlm":
+            return self.satlm_prompt(test_ex, shots)
+        else:
+            raise RuntimeError("Not Implemented Yet")
+
+    def cot_prompt(self, test_ex, shots):
+        assert len(shots) == 0
+        # return test_example
+        return f"Q: {test_ex['question']}\nA:"
+
+    def satlm_prompt(self, test_ex, shots):
+        assert len(shots) == 0
+        test_example = (
+            '"""\n'
+            f'{test_ex["question"]}\n'
+            '"""\n' + 
+            '# solution in Python:\n' +
+            'def solution():\n'
+        )
+        return test_example
+
+class Boardmaindp1TaskHelper(BoardgameQATaskHelper):
+    style_to_completion_length = {
+        "cot": 512,
+        "satlm": 768,
+    }
+
+class Boardmaindp2TaskHelper(BoardgameQATaskHelper):
+    style_to_completion_length = {
+        "cot": 512,
+        "satlm": 1536,
+    }
+
+class Boardmaindp3TaskHelper(BoardgameQATaskHelper):
+    style_to_completion_length = {
+        "cot": 768,
+        "satlm": 1536,
+    }

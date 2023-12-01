@@ -17,6 +17,7 @@ from prog_solver.gsm_solver import  gsm_proglm_exec, gsm_satlm_exec
 from prog_solver.clutrr_solver import clutrr_proglm_exec, clutrr_satlm_exec
 from prog_solver.proof_solver import proof_proglm_exec, proof_satlm_exec
 from prog_solver.arlsat_solver import arlsat_satlm_exec
+from prog_solver.boardgame_solver import board_satlm_exec
 
 
 EVALUATOR_REGISTRY = {}
@@ -496,6 +497,65 @@ class LongContextMCEvaluator(TaskEvaluator):
 class ArLSATEvaluator(LongContextMCEvaluator):
     pass
 
+class BoardgameQAEvaluator(TaskEvaluator):
+    @staticmethod
+    def postprocess_ground_truth(gt):
+        if gt == "proved":
+            return "yes"
+        elif gt == "disproved":
+            return "no"
+        elif gt == "unknown":
+            return "unknown"
+        else:
+            raise RuntimeError("Not implemented")
+
+    @classmethod
+    def enter_evaluation(cls):
+        random.seed(42)
+
+    @staticmethod
+    def postprocess_completion(completion, prompting_style, train_sep, example=None):
+        completion = completion.rstrip().split(train_sep)[0]
+        if prompting_style == "cot":
+            return BoardgameQAEvaluator.postprocess_cot_style_completion(completion)
+        elif prompting_style == "satlm":
+            return BoardgameQAEvaluator.postprocess_deafisible_sat_style_completion(completion, prompting_style)
+        else:
+            raise RuntimeError("Not implemented")
+
+    @staticmethod
+    def postprocess_cot_style_completion(completion):
+        if "the answer is" in completion.lower():
+            result = completion.lower().strip().split("the answer is")[1].strip().rstrip(".")
+        else:
+            result = BoardgameQAEvaluator.NULL_ANSWER
+
+        return completion, result
+
+    @staticmethod
+    def postprocess_deafisible_sat_style_completion(completion, prompting_style):
+        completion = completion.strip()
+        try:
+            _, result = board_satlm_exec(completion, False)
+            result = result.strip()
+            if "ExecutionError" in result:
+                result = BoardgameQAEvaluator.NULL_ANSWER
+        except:
+            result = BoardgameQAEvaluator.NULL_ANSWER
+        return completion, result
+
+    @classmethod
+    def generate_random_answer(cls):
+        return random.choice(["yes", "no", "unknown"])
+
+class Boardmaindp1Evaluator(BoardgameQAEvaluator):
+    pass
+
+class Boardmaindp2Evaluator(BoardgameQAEvaluator):
+    pass
+
+class Boardmaindp3Evaluator(BoardgameQAEvaluator):
+    pass
 
 def get_task_evaluator(taskname):
     return EVALUATOR_REGISTRY[taskname.lower()]
